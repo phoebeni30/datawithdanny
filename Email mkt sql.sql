@@ -105,7 +105,7 @@ select * from avg_category_counts
 order by category_name
 
 --------------------------------------------
---$5 Calculate How does the customer rank in terms of the top X% compared to all other customers in this film category?
+--#5 Calculate How does the customer rank in terms of the top X% compared to all other customers in this film category?
 --------------------------------------------
 DROP TABLE IF EXISTS category_percentiles;
 with cte_percentile as 
