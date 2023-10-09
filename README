@@ -12,6 +12,7 @@ How many total films have they watched in their top category and how does it com
 How many more films has the customer watched compared to the average DVD Rental Co customer?
 How does the customer rank in terms of the top X% compared to all other customers in this film category?
 What are the top 3 film recommendations in the top category ranked by total customer rental count which the customer has not seen before?
+
 2. Second Category
 What is the second ranking category by total rental count?
 What proportion of each customer’s total films watched does this count make?
