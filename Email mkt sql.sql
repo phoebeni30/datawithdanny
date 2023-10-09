@@ -152,12 +152,12 @@ order by customer_id asc
 
 --------------------------------------------
 --#7 Generate 1st category insight - create temp table top_1_category_insight
-----customer_id /top_2_category/
-----category_name /top_2_category/
-----rental_count /top_2_category/
-----comparison = rental_count - avg_category_count  /top_2_category/ - /avg_category_counts/
-----percentile  /category_percentiles/
-----proportion = rental_count/ total_count   ///top_2_category// - //total_film_counts//
+----customer_id 
+----category_name
+----rental_count 
+----comparison = rental_count - avg_category_count
+----percentile 
+----proportion = rental_count
 --------------------------------------------
 DROP TABLE IF EXISTS top_1_category_insight;
 select t.customer_id,
