@@ -25,10 +25,10 @@ Approach:
 - Declare single variables, cursor variables and use while loop to insert monthly payment data row into subscription table
 
 --Update the accurate price
-  UPDATE dbo.plans
-  SET price = (
-                  case when price is not null then price/100 else price end 
-  )
+      UPDATE dbo.plans
+      SET price = (
+                      case when price is not null then price/100 else price end 
+      )
 
 --A. Transaction payment table in 2020
 -----Create temp table lead_table
@@ -56,48 +56,48 @@ Approach:
   
 ----1: non churn monthly customer (1,N - 2,N) 
 ---------create temp_case1_transaction
-  drop table if exists temp_case1_transaction
-  select customer_id, plan_id, start_date, DATEDIFF(DAY,start_date, '2020-12-31')/30 as count_month
-  into temp_case1_transaction
-  from lead_table
-  where
-          lead_plan_id is null 
-          and plan_id not in (3,4)
-  
-  --select * from temp_case1_transaction
-  
-  declare transactiondatecursorcase1 CURSOR FOR 
-          select t.customer_id, t.plan_id, t.start_date, t.count_month 
-          from temp_case1_transaction t
-  
-  open transactiondatecursorcase1
-  
-  declare @customeridcase1 INT 
-  declare @planidcase1 INT 
-  declare @startdatecase1 DATETIME
-  declare @countmonthcase1 int = (select count_month from temp_case1_transaction where customer_id = @customeridcase1)
-  
-  FETCH NEXT FROM transactiondatecursorcase1 into @customeridcase1,@planidcase1, @startdatecase1, @countmonthcase1
-  WHILE @@FETCH_STATUS = 0        
-  BEGIN
-          declare @dateaddcase1 int
-          set @dateaddcase1 = 1
-          while @dateaddcase1 <= @countmonthcase1
-          BEGIN   
-                  INSERT INTO temp_case1_transaction (customer_id, plan_id, start_date, count_month) 
-                  VALUES (@customeridcase1, @planidcase1,DATEADD(month,@dateaddcase1,@startdatecase1),'')
-                  SET @dateaddcase1 = @dateaddcase1 + 1
-          END 
-  
-  FETCH NEXT FROM transactiondatecursorcase1 into @customeridcase1,@planidcase1, @startdatecase1, @countmonthcase1
-  END
-  
-  CLOSE transactiondatecursorcase1
-  DEALLOCATE transactiondatecursorcase1
-  
-  
-  select count(distinct customer_id) from temp_case1_transaction
-  order by customer_id asc, start_date asc
+      drop table if exists temp_case1_transaction
+      select customer_id, plan_id, start_date, DATEDIFF(DAY,start_date, '2020-12-31')/30 as count_month
+      into temp_case1_transaction
+      from lead_table
+      where
+              lead_plan_id is null 
+              and plan_id not in (3,4)
+      
+      --select * from temp_case1_transaction
+      
+      declare transactiondatecursorcase1 CURSOR FOR 
+              select t.customer_id, t.plan_id, t.start_date, t.count_month 
+              from temp_case1_transaction t
+      
+      open transactiondatecursorcase1
+      
+      declare @customeridcase1 INT 
+      declare @planidcase1 INT 
+      declare @startdatecase1 DATETIME
+      declare @countmonthcase1 int = (select count_month from temp_case1_transaction where customer_id = @customeridcase1)
+      
+      FETCH NEXT FROM transactiondatecursorcase1 into @customeridcase1,@planidcase1, @startdatecase1, @countmonthcase1
+      WHILE @@FETCH_STATUS = 0        
+      BEGIN
+              declare @dateaddcase1 int
+              set @dateaddcase1 = 1
+              while @dateaddcase1 <= @countmonthcase1
+              BEGIN   
+                      INSERT INTO temp_case1_transaction (customer_id, plan_id, start_date, count_month) 
+                      VALUES (@customeridcase1, @planidcase1,DATEADD(month,@dateaddcase1,@startdatecase1),'')
+                      SET @dateaddcase1 = @dateaddcase1 + 1
+              END 
+      
+      FETCH NEXT FROM transactiondatecursorcase1 into @customeridcase1,@planidcase1, @startdatecase1, @countmonthcase1
+      END
+      
+      CLOSE transactiondatecursorcase1
+      DEALLOCATE transactiondatecursorcase1
+      
+      
+      select count(distinct customer_id) from temp_case1_transaction
+      order by customer_id asc, start_date asc
 
 
 ----2: Annual user (3)
