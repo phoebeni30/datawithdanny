@@ -308,11 +308,11 @@ Approach:
 #### Results
 Subscription table
 <p align="center">
-    <img src="https://imgur.com/a/j6XGZze">
+    <img src="https://i.imgur.com/oK2fBoR.png">
 
 Transaction table
 <p align="center">
-    <img src="https://imgur.com/a/j6XGZze">
+    <img src="https://i.imgur.com/n8DtY9g.png">
 
 
 ### Cohort churn rate analysis
@@ -408,7 +408,7 @@ Transaction table
 
 #### Results
 <p align="center">
-    <img src="https://imgur.com/a/j6XGZze">
+    <img src="https://i.imgur.com/XPY2ClU.png">
 
 
 
