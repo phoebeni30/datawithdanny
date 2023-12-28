@@ -160,6 +160,7 @@ Approach:
               order by customer_id asc, start_date asc
 
 ----4: basic to pro monthly and pro annual (1,2 - 1,3)
+
               drop table if exists temp_case4_transaction
               select customer_id, plan_id, start_date,
                       DATEDIFF(DAY, start_date, lead_start_date)/30 as count_month
@@ -203,6 +204,7 @@ Approach:
               order by customer_id asc, start_date asc
 
 ----5: pro monthly to pro annual (2,3)
+
               drop table if exists temp_case5_transaction
               select customer_id, plan_id, start_date,
                       (DATEDIFF(DAY, start_date, lead_start_date)/30 - 1) as count_month
@@ -247,6 +249,7 @@ Approach:
 
 
 --final union table: union all temp_caseX_transaction
+
               drop table if exists temp_union_transaction;
               with cte_union as (
                       select a.customer_id, a.plan_id, a.start_date
@@ -276,6 +279,7 @@ Approach:
               order by customer_id asc, start_date asc
 
 --final table transaction with price change
+
               drop table if exists temp_final_transaction_payment;
               with cte_price as (
                       select tu.customer_id, tu.plan_id, tu.start_date,
@@ -314,6 +318,7 @@ Transaction table
 ### Cohort churn rate analysis
 
 -----Create temp table after_trial_table
+
               drop table if exists month_after_trial_table;
               with after_trial_table as (
                       select p.customer_id,
@@ -334,6 +339,7 @@ Transaction table
               select * from month_after_trial_table
 
 -----Create temp table month_trial_table
+
               drop table if exists month_trial_table;
               with trial_table as (
                       select s.customer_id, 
@@ -350,6 +356,7 @@ Transaction table
               group by t.month_num
 
 -----Create table show number_user_trial and number_user_subscription_after_trial
+
               select t.month_num,
                       t.total_trial,
                       a.total_user_after_trial
@@ -359,6 +366,7 @@ Transaction table
 
 
 -----Create temp table cohort retention
+
               drop table if exists cohort_customer_lifetime;
               with fact_table as (
                       select p.customer_id,
