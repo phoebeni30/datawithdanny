@@ -312,7 +312,7 @@ Subscription table
 
 Transaction table
 <p align="center">
-    <img src="https://i.imgur.com/n8DtY9g.png">
+    <img src="https://i.imgur.com/F3M6Lfh.png">
 
 
 ### Cohort churn rate analysis
