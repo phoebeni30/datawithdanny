@@ -9,16 +9,20 @@ File dim_merchant.xlsx: dimension table about merchant info.
 File dim_store.xlsx: dimension table about store info
 
 # BUSINESS REQUIREMENT
+A. Create required table
 For each user, please show:
-1: The first 2 appID user payments and the date that users used those services?
-2: The last storeID user payments and the date that users used that service?
+1. The first 2 appID user payments and the date that users used those services?
+2. The last storeID user payments and the date that users used that service?
 3. How many distinct merchantID & channels that users pay for?
 4. How much SaleVolume did each users spend in the last 30 days?
 5. Find the merchantName that has the highest applied voucher transactions.
 6. Find the Province that has the highest sale volume in the last 45 days.
 
+B. Using the RFM model, segment customers into different groups.
 
 # Solution visualization
+
+### PART A
 
       DROP TABLE IF EXISTS temptable_partI;
       with appid_row_number as (
@@ -188,3 +192,56 @@ For each user, please show:
 --Check table
 select * from temptable_partI
 order by userID asc
+
+### PART B
+
+--create temp table temp_rfmcell
+
+                  drop table if exists temp_rfmcell;
+                  with base as (
+                          select f.userID,
+                                  max(f.TransactionDate) as most_recently_purchased_date,
+                                  DATEDIFF(DAY, max(f.TransactionDate), GETDATE()) as recency_score,
+                                  COUNT(transID) as frequency_score,
+                                  sum(SalesAmount) as monetary_score
+                          from dbo.fact f
+                          group by f.userID
+                  )
+                  ,
+                  rfmcode_table as (
+                          select b.userID,
+                                  b.recency_score,
+                                  b.frequency_score,
+                                  b.monetary_score,
+                                  NTILE(5) over(order by b.recency_score desc) as R,
+                                  NTILE(5) over(order by b.frequency_score asc) as F,
+                                  NTILE(5) over(order by b.monetary_score asc) as M
+                          from base b 
+                  )
+                  ,
+                  rfmavg_table as (
+                          select t.userID,
+                                  t.R, t.F, t.M,
+                                  CONCAT(t.R, t.F, t.M) as rfm_cell,
+                                  round((cast(t.R as float) + t.F + t.M)/3,2) as avg_rfm_score
+                          from rfmcode_table t
+                  )
+                  select t.rfm_cell,
+                          t.avg_rfm_score,
+                          count(t.userID) as total_user,
+                          sum(cast(b.monetary_score as float)) as total_revenue,
+                          round(sum(cast(b.monetary_score as float))/count(t.userID),2) as avg_revenue_per_user
+                  into temp_rfmcell --temp table rfm_cell
+                  from rfmavg_table t 
+                  inner join base b on b.userID = t.userID
+                  group by t.rfm_cell, t.avg_rfm_score
+                  order by t.avg_rfm_score asc
+
+--check table
+
+            select * from temp_rfmcell
+### Results
+
+<p align="center">
+    <img src="https://i.imgur.com/uYQ4zrJ.png">\
+
