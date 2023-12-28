@@ -32,6 +32,7 @@ Approach:
 
 --A. Transaction payment table in 2020
 -----Create temp table lead_table
+
       DROP TABLE IF EXISTS lead_table;
       with cte_lead_table as (
               select s.customer_id, 
@@ -56,6 +57,7 @@ Approach:
   
 ----1: non churn monthly customer (1,N - 2,N) 
 ---------create temp_case1_transaction
+
       drop table if exists temp_case1_transaction
       select customer_id, plan_id, start_date, DATEDIFF(DAY,start_date, '2020-12-31')/30 as count_month
       into temp_case1_transaction
@@ -102,6 +104,7 @@ Approach:
 
 ----2: Annual user (3)
 ---------create temp_case2_transaction
+
               drop table if exists temp_case2_transaction
               select customer_id, plan_id, start_date
               into temp_case2_transaction
@@ -113,6 +116,7 @@ Approach:
 
 ----3: churn from basic/ pro monthly (1,4 - 2,4)
 ---------create temp_case3_transaction
+
               drop table if exists temp_case3_transaction
               select customer_id, plan_id, start_date,
                       DATEDIFF(DAY, start_date, lead_start_date)/30 as count_month
