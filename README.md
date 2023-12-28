@@ -32,27 +32,27 @@ Approach:
 
 --A. Transaction payment table in 2020
 -----Create temp table lead_table
-  DROP TABLE IF EXISTS lead_table;
-  with cte_lead_table as (
-          select s.customer_id, 
-                  s.plan_id,
-                  s.start_date,
-                  lead(s.plan_id) over(partition by s.customer_id order by s.start_date) lead_plan_id,
-                  lead(s.start_date) over(partition by s.customer_id order by s.start_date) lead_start_date
-          from dbo.subscriptions s 
-  )
-  select * 
-  into lead_table
-  from cte_lead_table
-  where year(start_date) = 2020
-  and plan_id != 0 
-
-  select * from lead_table
-  
-  /* select plan_id, lead_plan_id,count(*)
-  from lead_table
-  group by plan_id, lead_plan_id
-  order by plan_id asc */
+      DROP TABLE IF EXISTS lead_table;
+      with cte_lead_table as (
+              select s.customer_id, 
+                      s.plan_id,
+                      s.start_date,
+                      lead(s.plan_id) over(partition by s.customer_id order by s.start_date) lead_plan_id,
+                      lead(s.start_date) over(partition by s.customer_id order by s.start_date) lead_start_date
+              from dbo.subscriptions s 
+      )
+      select * 
+      into lead_table
+      from cte_lead_table
+      where year(start_date) = 2020
+      and plan_id != 0 
+    
+      select * from lead_table
+      
+      /* select plan_id, lead_plan_id,count(*)
+      from lead_table
+      group by plan_id, lead_plan_id
+      order by plan_id asc */
   
 ----1: non churn monthly customer (1,N - 2,N) 
 ---------create temp_case1_transaction
