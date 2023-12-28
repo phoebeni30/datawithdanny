@@ -190,8 +190,13 @@ B. Using the RFM model, segment customers into different groups.
       inner join province_infor pi on ai.userID = pi.userID
       
 --Check table
-select * from temptable_partI
-order by userID asc
+
+            select * from temptable_partI
+            order by userID asc
+
+#### Results
+<p align="center">
+    <img src="https://i.imgur.com/uYQ4zrJ.png">\
 
 ### PART B
 
@@ -240,8 +245,8 @@ order by userID asc
 --check table
 
             select * from temp_rfmcell
-### Results
 
+#### Results
 <p align="center">
-    <img src="https://i.imgur.com/uYQ4zrJ.png">\
+    <img src="https://i.imgur.com/qNM85nq.png">\
 
