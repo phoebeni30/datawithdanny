@@ -308,7 +308,7 @@ Approach:
 #### Results
 Subscription table
 <p align="center">
-    <img src="https://i.imgur.com/oK2fBoR.png">
+    <img src="https://i.imgur.com/U9RlG0Z.png">
 
 Transaction table
 <p align="center">
